@@ -10,7 +10,7 @@ class NetworkHelper {
 
   NetworkHelper(this.query);
 
-  ///
+  //
   Future getData() async {
     http.Response response =
         await http.get('$url$query&appid=$API_KEY&units=metric');
@@ -24,7 +24,7 @@ class NetworkHelper {
   }
 
   ///Show icon for specific weather condition
-  Future<ImageProvider> loadWeatherIcon(String icon) async {
+  static Future<ImageProvider> loadWeatherIcon(String icon) async {
     return NetworkImage('http://openweathermap.org/img/wn/$icon@4x.png');
   }
 }

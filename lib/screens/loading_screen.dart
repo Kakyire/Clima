@@ -12,34 +12,21 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   void _getLocationData() async {
-    Location location = Location();
-    await location.getLocation();
-    String query = 'lat=${location.latitude}&lon=${location.longitude}';
-    NetworkHelper helper = NetworkHelper(query);
+    String currentLocation = await UserLocation.getLocation();
+
+    NetworkHelper helper = NetworkHelper(currentLocation);
     var decode = await helper.getData();
 
-    String city = decode['name'];
-    String country = decode['sys']['country'];
-    var temperature = decode['main']['temp'];
-    String condition = decode['weather'][0]['main'];
-    String icon = decode['weather'][0]['icon'];
-
-    String cityCountry = '$city - $country';
-
-    ImageProvider iconImage = await helper.loadWeatherIcon(icon);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return LocationScreen(
-            temperature: temperature.toInt(),
-            condition: condition,
-            cityCountry: cityCountry,
-            icon: iconImage,
-          );
-        },
-      ),
-    );
+    if (decode != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return LocationScreen(weatherDetails: decode);
+          },
+        ),
+      );
+    }
   }
 
   @override
